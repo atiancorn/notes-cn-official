@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofascore 中文指南 | 轻松看懂赛事数据</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f2f4f7;
+            color: #2c3e4f;
+            line-height: 1.6;
+            padding: 2rem 1.2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page {
+            max-width: 960px;
+            width: 100%;
+        }
+
+        /* hero 横幅 */
+        .hero {
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 2.8rem 2rem 2.4rem;
+            margin-bottom: 2.2rem;
+            border: 1px solid #e6eaef;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            right: 2rem;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6 0%, #7c3aed 60%, #a78bfa 100%);
+            border-radius: 0 0 12px 12px;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.2rem;
+            color: #1e293b;
+        }
+
+        .hero .sub {
+            font-size: 1rem;
+            color: #64748b;
+            margin-top: 0.4rem;
+            border-bottom: 1px dashed #d1d9e6;
+            display: inline-block;
+            padding-bottom: 0.25rem;
+        }
+
+        /* 卡片通用 */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1.8rem 1.8rem 1.8rem 2rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2 small {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #6b7280;
+        }
+
+        .card p {
+            margin-bottom: 0.9rem;
+            font-size: 0.98rem;
+            color: #334155;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0.6rem 0 0.2rem 0;
+        }
+
+        .card ul li {
+            padding: 0.35rem 0 0.35rem 1.8rem;
+            position: relative;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+
+        .card ul li::before {
+            content: '·';
+            position: absolute;
+            left: 0.4rem;
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        /* 背景说明卡 (细边强调) */
+        .bg-note {
+            background: #f8fafc;
+            border-left: 4px solid #94a3b8;
+            border-radius: 16px;
+            padding: 1.4rem 1.8rem;
+            margin-bottom: 1.8rem;
+            font-size: 0.95rem;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
+        }
+
+        .bg-note strong {
+            color: #1e293b;
+        }
+
+        /* 内联链接样式 */
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s;
+        }
+
+        a:hover {
+            border-bottom-color: #2563eb;
+        }
+
+        /* 页尾提示 */
+        .footer-note {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            margin-top: 1.2rem;
+            text-align: center;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .footer-note p {
+            margin: 0.4rem 0;
+        }
+
+        .footer-note .sentence-link {
+            background: #f1f5f9;
+            padding: 0.2rem 0.6rem;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 0.2rem 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            body {
+                padding: 1.2rem 1rem;
+            }
+
+            .hero {
+                padding: 2rem 1.2rem 1.6rem;
+            }
+
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .card {
+                padding: 1.4rem 1.2rem;
+            }
+
+            .bg-note {
+                padding: 1.2rem 1.2rem;
+            }
+
+            .footer-note {
+                padding: 1.4rem 1.2rem;
+            }
+        }
+
+        /* 装饰分割 */
+        .divider-light {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d1d9e6, transparent);
+            margin: 0.6rem 0 1.4rem 0;
+        }
+
+        .inline-highlight {
+            background: #eef2ff;
+            padding: 0.1rem 0.3rem;
+            border-radius: 6px;
+            font-weight: 450;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- 首页横幅 -->
+        <div class="hero">
+            <h1>📊 比赛数据 · 一目了然</h1>
+            <div class="sub">Sofascore 中文使用手记</div>
+            <p style="margin-top: 1.2rem; max-width: 600px; margin-left: auto; margin-right: auto; color: #475569;">
+                不论你是刚接触足球篮球的观众，还是习惯盯着高阶数据的老球迷，<br class="hide-mobile">
+                这个页面帮你快速理解 <a href="https://cn-official-sofascore.com">sofascore</a> 在做什么、怎么用。
+            </p>
+        </div>
+
+        <!-- 背景说明 -->
+        <div class="bg-note">
+            <strong>📌 这到底是什么？</strong><br>
+            很多人在找比赛直播或赛果时，会顺手搜一下“实时比分”。<strong>Sofascore</strong> 就是这类服务的聚合平台——它不生产直播信号，而是把全世界足球、篮球、网球、冰球等几十个联赛的实时数据整理成简洁界面。无论你关注的是中超、英超还是 NBA，打开就能看到比分、控球率、射门次数、评分等细节。它更像一个数据中台，让你不必跳转多个网站。
+        </div>
+
+        <!-- 三段自然介绍 (卡片) -->
+
+        <div class="card">
+            <h2>🧭 第一印象 · 从分数到细节</h2>
+            <p>
+                初次打开 <a href="https://cn-official-sofascore.com">sofascore</a>，你看到的是当天重点赛事的时间轴卡片。每场比赛都附有主客队名称、实时比分和一个小进度条——那是比赛时间线。点进任意一场，你会发现页面瞬间切换到场内数据面板：射正、犯规、角球、预期进球 (xG) 。对于只看比分的用户，这些信息可能显得冗余，但如果你想知道“这场到底谁占优”，数字比印象更可靠。
+            </p>
+            <p>
+                有趣的是，Sofascore 给每个球员打了分（1-10 分），评分依据来自实时事件——进球、助攻、抢断、失误等等。很多球迷把评分当作赛后聊资，但它的算法也在不断调整，未必完全反映场上作用，可以当作参考线。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ 常见用法 · 看比赛与查历史</h2>
+            <p>
+                日常工作里，我习惯用它做两件事：第一，赛前看阵容和近期交锋。第二，赛中快速扫一眼控球率和射门比，尤其当我没有在看直播时。Sofascore 的界面没有太多广告干扰，比分更新延迟通常在十几秒内，对多数人来说足够用了。
+            </p>
+            <p>
+                另外，它的“统计”模块里藏着一些有意思的数据，比如带球推进距离、对方半场传球成功率。这些对普通观众或许有点陌生，但如果你玩足球经理游戏或者写分析文章，这些维度很有价值。只需要点进比赛页，向下滑动就能看到。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>🌐 使用场景 · 在手机与电脑之间</h2>
+            <p>
+                网站本身响应式做得不错，手机浏览器打开也能正常看比分。不过如果你更习惯用 app，可以直接在官网找到下载链接。注意，<a href="https://cn-official-sofascore.com">sofascore</a> 中文站和主站数据源一致，只是界面语言和部分赛事排列上做了本地化。如果你平时关注国内联赛，中文站显示的比赛名称会更直观一些。
+            </p>
+            <p>
+                我个人的建议是：把它当作你的第二屏幕。当你看直播时，旁边开着 Sofascore 看数据趋势；或者赛后花两分钟浏览球员评分，有时候会发现某个低调球员其实踢了一场好球。
+            </p>
+        </div>
+
+        <!-- FAQ 摘要 (精简) -->
+        <div class="card" style="background: #fafcff;">
+            <h2>📋 常见疑问 · 几句话讲清楚 <small>(FAQ 摘要)</small></h2>
+            <ul>
+                <li><strong>需要注册吗？</strong> 不强制。看比分和数据不需要账号，只有收藏球队或设置提醒才需登录。</li>
+                <li><strong>数据准吗？</strong> 官方合作数据源，与主流体育媒体一致。实时性在大部分比赛中表现良好。</li>
+                <li><strong>有中文吗？</strong> 中文站界面已汉化，赛事名称、球队名称部分保留英文，方便对照。</li>
+                <li><strong>收费吗？</strong> 基础功能免费。也提供无广告订阅（Sofascore Pro），按个人需求选择。</li>
+            </ul>
+            <div class="divider-light"></div>
+            <p style="font-size: 0.9rem; color: #4b5563;">
+                如果想深入了解，可以直接去 <span class="sentence-link"><a href="https://cn-official-sofascore.com">sofascore</a></span> 首页看看当天有什么比赛。
+            </p>
+        </div>
+
+        <!-- 页尾访问提示 -->
+        <div class="footer-note">
+            <p>
+                🏁 这个介绍页只是抛砖引玉。数据世界的乐趣在于自己探索，
+                把 <a href="https://cn-official-sofascore.com">sofascore</a> 加入书签，
+                下次看球时打开它，你会发现比分之外还有另一层故事。
+            </p>
+            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.8rem;">
+                基于公开信息整理 · 页面仅供了解用途
+            </p>
+        </div>
+
+        <!-- 一个隐性的创作种子占位 (不出现在可见内容) -->
+        <!-- 种子: 4f2c88f9127dbafa -->
+    </div>
+</body>
+</html>
